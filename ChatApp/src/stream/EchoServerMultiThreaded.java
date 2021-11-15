@@ -9,9 +9,11 @@ package stream;
 
 import java.io.*;
 import java.net.*;
+import java.util.ArrayList;
 
 public class EchoServerMultiThreaded {
 
+	
 	/**
 	 * main method
 	 * 
@@ -21,6 +23,8 @@ public class EchoServerMultiThreaded {
 	public static void main(String args[]) {
 		ServerSocket listenSocket;
 
+		ArrayList<Client> clientList = new ArrayList<Client>();
+		
 		if (args.length != 1) {
 			System.out.println("Usage: java EchoServer <EchoServer port>");
 			System.exit(1);
@@ -31,8 +35,11 @@ public class EchoServerMultiThreaded {
 			while (true) {
 				Socket clientSocket = listenSocket.accept();
 				System.out.println("Connexion from:" + clientSocket.getInetAddress());
-				ClientThread ct = new ClientThread(clientSocket);
-				ct.start();
+				ClientThreadSend  ctSend = new ClientThreadSend(clientSocket);
+				ClientThreadReceive ctReceive = new ClientThreadReceive(clientSocket);
+				ctSend.start();
+				ctReceive.start();
+				clientList.add(new Client(ctSend, ctReceive));
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);

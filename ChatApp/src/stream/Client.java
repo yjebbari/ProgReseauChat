@@ -4,18 +4,22 @@ public class Client {
 	private String name;
 	private String ipAddress;
 	private String status;
-	private EchoClient echoClient;
-	
-	public Client(String name, String ipAddress, String status, EchoClient echoClient) {
+	private ClientThreadSend threadSend;
+	private ClientThreadReceive threadReceive;
+
+	public Client(String name, String ipAddress, String status, ClientThreadSend threadSend, ClientThreadReceive threadReceive) {
 		super();
 		this.name = name;
 		this.ipAddress = ipAddress;
 		this.status = status;
-		this.echoClient = echoClient;
+		this.threadSend = threadSend;
+		this.threadReceive = threadReceive;
 	}
-
-	public Client() {
+	
+	public Client(ClientThreadSend threadSend, ClientThreadReceive threadReceive) {
 		super();
+		this.threadSend = threadSend;
+		this.threadReceive = threadReceive;
 	}
 
 	// Getters and setters
@@ -43,13 +47,23 @@ public class Client {
 		this.status = status;
 	}
 
-	public EchoClient getEchoClient() {
-		return echoClient;
+	public ClientThread getThreadSend() {
+		return threadSend;
 	}
 
-	public void setEchoClient(EchoClient echoClient) {
-		this.echoClient = echoClient;
+	public void setThreadSend(ClientThread threadSend) {
+		this.threadSend = threadSend;
 	}
+
+	public ClientThreadReceive getThreadReceive() {
+		return threadReceive;
+	}
+
+	public void setThreadReceive(ClientThreadReceive threadReceive) {
+		this.threadReceive = threadReceive;
+	}
+
+	
 	
 	
 	
