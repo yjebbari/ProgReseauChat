@@ -22,6 +22,11 @@ public class ClientThreadReceive
 		this.clientSocket = s;
 	}
 
+	public void receiveMessage(String line) {
+		this.socOut.println(line);
+		System.out.println("thread " + getId() + " received : " + line);
+	}
+	
  	/**
   	* receives a request from client then sends an echo to the client
   	* @param clientSocket the client socket

@@ -47,11 +47,11 @@ public class Client {
 		this.status = status;
 	}
 
-	public ClientThread getThreadSend() {
+	public ClientThreadSend getThreadSend() {
 		return threadSend;
 	}
 
-	public void setThreadSend(ClientThread threadSend) {
+	public void setThreadSend(ClientThreadSend threadSend) {
 		this.threadSend = threadSend;
 	}
 
