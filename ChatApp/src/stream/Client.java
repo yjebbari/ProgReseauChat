@@ -1,11 +1,14 @@
 package stream;
 
+import java.net.Socket;
+
 public class Client {
 	private String name;
 	private String ipAddress;
 	private String status;
 	private ClientThreadSend threadSend;
 	private ClientThreadReceive threadReceive;
+	private Socket clientSocket;
 
 	public Client(String name, String ipAddress, String status, ClientThreadSend threadSend, ClientThreadReceive threadReceive) {
 		super();
@@ -16,10 +19,11 @@ public class Client {
 		this.threadReceive = threadReceive;
 	}
 	
-	public Client(ClientThreadSend threadSend, ClientThreadReceive threadReceive) {
+	public Client(ClientThreadSend threadSend, ClientThreadReceive threadReceive,Socket clientSocket) {
 		super();
 		this.threadSend = threadSend;
 		this.threadReceive = threadReceive;
+		this.clientSocket = clientSocket;
 	}
 
 	// Getters and setters
@@ -61,6 +65,10 @@ public class Client {
 
 	public void setThreadReceive(ClientThreadReceive threadReceive) {
 		this.threadReceive = threadReceive;
+	}
+
+	public Socket getClientSocket() {
+		return clientSocket;
 	}
 
 	

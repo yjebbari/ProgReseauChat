@@ -8,13 +8,13 @@ public class ClientThreadSend extends Thread {
 	private PrintStream socOut = null;
 	private BufferedReader socIn = null;
 
-	private ArrayList<Client> clientList;
+	//private ArrayList<Client> clientList;
 
 	private Socket clientSocket;
 
-	ClientThreadSend(Socket s, ArrayList<Client> list) {
+	ClientThreadSend(Socket s) {
 		this.clientSocket = s;
-		this.clientList = list;
+		//this.clientList = list;
 	}
 
 	/**
@@ -31,14 +31,30 @@ public class ClientThreadSend extends Thread {
 				System.out.println("Thread " + getId() + " send");
 				String line = stdIn.readLine();
 				socOut.println(line);
-				for (Client c : clientList) {
-					if (this.getId() != c.getThreadSend().getId())
-						c.getThreadReceive().receiveMessage(line);
-				}
+//				for (Client c : clientList) {
+//					if (this.getId() != c.getThreadSend().getId())
+//						c.getThreadReceive().receiveMessage(line);
+//				}
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);
 		}
+	}
+
+	public PrintStream getSocOut() {
+		return socOut;
+	}
+
+	public void setSocOut(PrintStream socOut) {
+		this.socOut = socOut;
+	}
+
+	public BufferedReader getSocIn() {
+		return socIn;
+	}
+
+	public void setSocIn(BufferedReader socIn) {
+		this.socIn = socIn;
 	}
 
 }

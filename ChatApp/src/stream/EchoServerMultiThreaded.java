@@ -32,14 +32,16 @@ public class EchoServerMultiThreaded {
 		try {
 			listenSocket = new ServerSocket(Integer.parseInt(args[0])); // port
 			System.out.println("Server ready...");
+			EchoServerMultiThreadedSend serverSend=new EchoServerMultiThreadedSend(clientList);
+			serverSend.start();
 			while (true) {
 				Socket clientSocket = listenSocket.accept();
 				System.out.println("Connexion from:" + clientSocket.getInetAddress());
-				ClientThreadSend  ctSend = new ClientThreadSend(clientSocket, clientList);
+				ClientThreadSend  ctSend = new ClientThreadSend(clientSocket);
 				ClientThreadReceive ctReceive = new ClientThreadReceive(clientSocket);
 				ctSend.start();
 				ctReceive.start();
-				clientList.add(new Client(ctSend, ctReceive));
+				clientList.add(new Client(ctSend, ctReceive,clientSocket));
 			}
 		} catch (Exception e) {
 			System.err.println("Error in EchoServer:" + e);

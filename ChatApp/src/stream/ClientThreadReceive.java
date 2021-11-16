@@ -44,6 +44,30 @@ public class ClientThreadReceive
         	System.err.println("Error in EchoServer:" + e); 
         }
        }
+
+	public PrintStream getSocOut() {
+		return socOut;
+	}
+
+	public void setSocOut(PrintStream socOut) {
+		this.socOut = socOut;
+	}
+
+	public BufferedReader getSocIn() {
+		return socIn;
+	}
+
+	public void setSocIn(BufferedReader socIn) {
+		this.socIn = socIn;
+	}
+
+	public Socket getClientSocket() {
+		return clientSocket;
+	}
+
+	public void setClientSocket(Socket clientSocket) {
+		this.clientSocket = clientSocket;
+	}
   
   }
 

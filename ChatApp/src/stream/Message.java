@@ -1,25 +1,33 @@
 package stream;
 
+import java.util.Date;
+
 public class Message {
 	
-	private String message;
+	private String text;
 	private Date date;
 	private Client sender;
 	private long idChatRoom;
 	
-	public Message(String message, Date date, Client sender, long idChatRoom) {
+	public Message(String text, Date date, Client sender, long idChatRoom) {
 		super();
-		this.message = message;
+		this.text = text;
 		this.date = date;
 		this.sender = sender;
 		this.idChatRoom = idChatRoom;
 	}
 	
-	public String getMessage() {
-		return message;
+	public Message(String text, Client sender) {
+		super();
+		this.text = text;
+		this.sender = sender;
 	}
-	public void setMessage(String message) {
-		this.message = message;
+	
+	public String getText() {
+		return text;
+	}
+	public void setText(String text) {
+		this.text = text;
 	}
 	public Date getDate() {
 		return date;
