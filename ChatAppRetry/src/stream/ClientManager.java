@@ -2,6 +2,7 @@ package stream;
 
 import java.io.*;
 import java.net.*;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 
 public class ClientManager implements Runnable {
@@ -29,8 +30,11 @@ public class ClientManager implements Runnable {
 			this.socOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 			this.clientUsername = socIn.readLine();
 			clientManagers.add(this);
-			messageHistory = "D:/documents/insa_lyon/4A/S1/Programmation_reseau/Chat/ChatAppRetry/history/messageHistory.txt";
-			loadTextHistory(messageHistory);
+			messageHistory = Paths.get("").toAbsolutePath().getParent().toString(); //D:/documents/insa_lyon/4A/S1/Programmation_reseau/Chat/ChatAppRetry/history/messageHistory.txt";
+			messageHistory = messageHistory.replace(System.getProperty("file.separator"), "/");
+			
+			messageHistory += "/history/messageHistory.txt";
+			loadTextHistory();
 
 			sendMessage(clientUsername + " has entered the chat!");
 		} catch (IOException e) {
@@ -57,7 +61,19 @@ public class ClientManager implements Runnable {
 		}
 	}
 
+	
+	/*
+	 * when someone disconnects it sends a message with null which is a problem
+	 */
 	public void sendMessage(String text) {
+		// Saving new texts into messageHistory.txt
+		try {
+			PrintWriter fileWriter = new PrintWriter(new BufferedWriter(new FileWriter(messageHistory, true)));
+			fileWriter.println(text);
+			fileWriter.close();
+		} catch (IOException e) {
+			System.out.println("Error in saving message.");
+		}
 		for (ClientManager clientManager : clientManagers) {
 			try {
 				if (!clientManager.getClientUsername().equals(this.clientUsername)) {
@@ -90,7 +106,7 @@ public class ClientManager implements Runnable {
 		}
 	}
 
-	public void loadTextHistory(String messageHistory) {
+	public void loadTextHistory() {
 		BufferedReader fileReader;
 		try {
 			socOut.write("----- Previous messages -----");
