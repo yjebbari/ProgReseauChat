@@ -29,7 +29,7 @@ public class Client {
 			socOut.flush();
 
 			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-			while (true) {
+			while (clientSocket.isConnected()) {
 				String text = stdIn.readLine();
 				socOut.write(username + " : " + text);
 				socOut.newLine();
@@ -45,7 +45,7 @@ public class Client {
 			@Override
 			public void run() {
 				String textReceived;
-				while (true) {
+				while (clientSocket.isConnected()) {
 					try {
 						textReceived = socIn.readLine();
 						System.out.println(textReceived);

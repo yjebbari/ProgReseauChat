@@ -11,6 +11,7 @@ public class ClientManager implements Runnable {
 	private BufferedWriter socOut;
 	private BufferedReader socIn;
 	private String clientUsername;
+	private String messageHistory;
 
 	public String getClientUsername() {
 		return clientUsername;
@@ -28,6 +29,9 @@ public class ClientManager implements Runnable {
 			this.socOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 			this.clientUsername = socIn.readLine();
 			clientManagers.add(this);
+			messageHistory = "D:/documents/insa_lyon/4A/S1/Programmation_reseau/Chat/ChatAppRetry/history/messageHistory.txt";
+			loadTextHistory(messageHistory);
+
 			sendMessage(clientUsername + " has entered the chat!");
 		} catch (IOException e) {
 			closeAll(clientSocket, socIn, socOut);
@@ -42,7 +46,7 @@ public class ClientManager implements Runnable {
 	public void run() {
 		String text;
 
-		while (true) {
+		while (clientSocket.isConnected()) {
 			try {
 				text = socIn.readLine();
 				sendMessage(text);
@@ -83,6 +87,38 @@ public class ClientManager implements Runnable {
 				socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+	}
+
+	public void loadTextHistory(String messageHistory) {
+		BufferedReader fileReader;
+		try {
+			socOut.write("----- Previous messages -----");
+			socOut.newLine();
+			socOut.flush();
+			fileReader = new BufferedReader(new FileReader(messageHistory));
+			String line;
+			line = fileReader.readLine();
+			while (line != null){
+				socOut.write(line);
+				socOut.newLine();
+				socOut.flush();
+				
+				line = fileReader.readLine();
+			}
+			socOut.write("-----------------------------");
+			socOut.newLine();
+			socOut.flush();
+			fileReader.close();
+		} catch (IOException e) {
+			try {
+				socOut.write("Error in loading previous messages.");
+				socOut.newLine();
+				socOut.flush();
+				closeAll(clientSocket, socIn, socOut);
+			} catch (Exception exc) {
+				closeAll(clientSocket, socIn, socOut);
+			}
 		}
 	}
 }
