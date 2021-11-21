@@ -39,6 +39,7 @@ public class ChatRoomView extends JFrame {
 		messagesArea = new JTextArea();
 		messagesArea.setEditable(false);
 		messagesArea.setBackground(Color.GRAY);
+		messagesArea.setLineWrap(true);
 		messagesArea.setFont(new Font("Verdana", Font.PLAIN, 20));
 		messagesArea.setBorder(new LineBorder(Color.BLACK, 4, true));
 		JScrollPane messagesScrollPane = new JScrollPane(messagesArea);
