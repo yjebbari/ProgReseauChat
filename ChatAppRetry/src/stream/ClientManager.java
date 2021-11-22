@@ -5,6 +5,16 @@ import java.net.*;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 
+/**
+ * ClientManager handles a client and sends its messages to all other connected
+ * clients Implements runnable to be executed in a thread.
+ * 
+ * @see Runnable
+ * @see Client
+ * @See Server
+ * @author Nathalie Lebon et Yousra Jebbari
+ *
+ */
 public class ClientManager implements Runnable {
 
 	private static ArrayList<ClientManager> clientManagers = new ArrayList<>();
@@ -22,23 +32,32 @@ public class ClientManager implements Runnable {
 		return socOut;
 	}
 
+	/**
+	 * Constructor of ClientManager. Initializes the buffered reader and writer, the
+	 * socket of the client, its username, and the path to the message history.
+	 * Loads the message history and notifies the other connected clients of the new
+	 * connection.
+	 * 
+	 * @see ClientManager#sendMessage(String)
+	 * @see ClientManager#loadTextHistory()
+	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
+	 * @see Client
+	 * 
+	 * @param clientSocket
+	 */
 	public ClientManager(Socket clientSocket) {
 		super();
 		try {
 			this.clientSocket = clientSocket;
 			this.socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			this.socOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
+
 			this.clientUsername = socIn.readLine();
-//			// send the id to the client
-//			System.out.println(clientManagers.size());
-//			socOut.write(clientManagers.size());
-//			socOut.newLine();
-//			socOut.flush();
-			
+
 			clientManagers.add(this);
-			messageHistory = Paths.get("").toAbsolutePath().getParent().toString(); 
+			messageHistory = Paths.get("").toAbsolutePath().getParent().toString();
 			messageHistory = messageHistory.replace(System.getProperty("file.separator"), "/");
-			
+
 			messageHistory += "/history/messageHistory.txt";
 			loadTextHistory();
 
@@ -49,10 +68,13 @@ public class ClientManager implements Runnable {
 	}
 
 	/**
-	 * TODO
+	 * Waits for a message to be sent by a client to send it to the other connected
+	 * clients.
 	 * 
-	 * @param clientSocket the client socket
-	 **/
+	 * @see ClientManager#sendMessage(String)
+	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
+	 * @see Client
+	 */
 	public void run() {
 		String text;
 
@@ -67,12 +89,15 @@ public class ClientManager implements Runnable {
 		}
 	}
 
-	
-	/*
-	 * when someone disconnects it sends a message with null which is a problem
+	/**
+	 * Sends the parameter <code>text</code> to the other connected clients after
+	 * saving it in the message history.
+	 * 
+	 * @see Client
+	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
+	 * @param text
 	 */
 	public void sendMessage(String text) {
-		// Saving new texts into messageHistory.txt
 		try {
 			PrintWriter fileWriter = new PrintWriter(new BufferedWriter(new FileWriter(messageHistory, true)));
 			fileWriter.println(text);
@@ -93,11 +118,27 @@ public class ClientManager implements Runnable {
 		}
 	}
 
+	/**
+	 * When a client disconnects, deletes the corresponding ClientManager from the
+	 * client manager list and notifies the other connected clients.
+	 * 
+	 * @see ClientManager#sendMessage(String)
+	 * @see Client
+	 */
 	public void deleteClientManager() {
 		clientManagers.remove(this);
 		sendMessage(this.clientUsername + " has left the chat");
 	}
 
+	/**
+	 * In case of an exception or when a client disconnects, deletes the client
+	 * manager, closes the buffered reader and writer and the socket of the client.
+	 * 
+	 * @see ClientManager#deleteClientManager()
+	 * @param socket
+	 * @param socIn
+	 * @param socOut
+	 */
 	public void closeAll(Socket socket, BufferedReader socIn, BufferedWriter socOut) {
 		deleteClientManager();
 		try {
@@ -112,6 +153,16 @@ public class ClientManager implements Runnable {
 		}
 	}
 
+	/**
+	 * Loads the message history from the file of path stored in
+	 * <code>messageHistory</code>, and sends it to the client that just connected
+	 * to the server.
+	 * 
+	 * @see ClientManager#sendMessage(String)
+	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
+	 * @see Client
+	 * 
+	 */
 	public void loadTextHistory() {
 		BufferedReader fileReader;
 		try {
@@ -121,11 +172,11 @@ public class ClientManager implements Runnable {
 			fileReader = new BufferedReader(new FileReader(messageHistory));
 			String line;
 			line = fileReader.readLine();
-			while (line != null){
+			while (line != null) {
 				socOut.write(line);
 				socOut.newLine();
 				socOut.flush();
-				
+
 				line = fileReader.readLine();
 			}
 			socOut.write("-----------------------------");

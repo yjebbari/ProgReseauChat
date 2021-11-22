@@ -24,7 +24,6 @@ public class ClientUDP extends DatagramSocket {
 			username = stdIn.readLine();
 			this.group = InetAddress.getByName("228.5.6.7");
 			this.socket = new MulticastSocket(1234);
-//			this.manager = new ServerUDP();
 			this.socket.joinGroup(group);
 		} catch (UnknownHostException e) {
 			closeAll();
@@ -35,19 +34,22 @@ public class ClientUDP extends DatagramSocket {
 	}
 
 	public void sendText() {
-				BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-				String text;
-				String textToSend;
-				try {
-					while (true) {
-						text = stdIn.readLine();
-						textToSend = username  + " : " + text;
-						DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
-						socket.send(message);
-					}
-				} catch (IOException e) {
-					closeAll();
+		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
+		String text;
+		String textToSend;
+		try {
+			while (true) {
+				text = stdIn.readLine();
+				if(text.equals("bye")) closeAll();
+				else {
+				textToSend = username + " : " + text;
+				DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
+				socket.send(message);
 				}
+			}
+		} catch (IOException e) {
+			closeAll();
+		}
 	}
 
 	public void receiveMessage() {
@@ -55,13 +57,12 @@ public class ClientUDP extends DatagramSocket {
 			@Override
 			public void run() {
 				try {
-					// get their responses!
 					byte[] buf = new byte[1000];
 					DatagramPacket recv = new DatagramPacket(buf, buf.length);
 					while (true) {
 						socket.receive(recv);
-						
-						String text = new String (recv.getData(), 0, recv.getLength());
+
+						String text = new String(recv.getData(), 0, recv.getLength());
 						System.out.println(text);
 					}
 				} catch (IOException e) {
@@ -76,7 +77,7 @@ public class ClientUDP extends DatagramSocket {
 		try {
 			socket.leaveGroup(group);
 		} catch (IOException e) {
-			closeAll();
+			e.printStackTrace();
 		}
 	}
 
@@ -84,6 +85,7 @@ public class ClientUDP extends DatagramSocket {
 		leaveGroup();
 		if (socket != null)
 			socket.close();
+		System.exit(1);
 	}
 
 	public static void main(String[] args) {
@@ -92,7 +94,6 @@ public class ClientUDP extends DatagramSocket {
 			client.receiveMessage();
 			client.sendText();
 		} catch (SocketException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 

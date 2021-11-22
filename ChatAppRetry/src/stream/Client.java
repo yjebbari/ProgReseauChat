@@ -9,13 +9,23 @@ import javax.swing.JOptionPane;
 
 import View.ChatRoomView;
 
+/**
+ * Client class allows the user to create a client to connect to the server of
+ * the chat application.
+ * 
+ * @see Server
+ * @see ClientManager
+ * @see ChatRoom
+ * @author Nathalie Lebon et Yousra Jebbari
+ *
+ */
 public class Client {
+
 	private Socket clientSocket;
 	private BufferedWriter socOut;
 	private BufferedReader socIn;
 	private String username;
 	private ChatRoomView clientView;
-	private long id;
 
 	public String getUsername() {
 		return username;
@@ -24,18 +34,16 @@ public class Client {
 	public BufferedWriter getSocOut() {
 		return socOut;
 	}
-	
-	public void setId() {
-		try {
-			this.id = Long.parseLong(socIn.readLine());
-			System.out.println(this.id);
-		} catch (NumberFormatException e) {
-			e.printStackTrace();
-		} catch (IOException e) {
-			closeAll();
-		}
-	}
 
+	/**
+	 * Constructor of Client. Initializes the buffered reader an writer, the
+	 * username and the socket of the client. Creates a ChatRoomView for the user to
+	 * see and send messages.
+	 * 
+	 * @see View.ChatRoomView
+	 * @param socket
+	 * @param username
+	 */
 	public Client(Socket socket, String username) {
 		super();
 		try {
@@ -51,29 +59,18 @@ public class Client {
 		}
 	}
 
-//	public void sendMessage() {
-//		try {
-//			socOut.write(username);
-//			socOut.newLine();
-//			socOut.flush();
-//
-//			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-//			while (clientSocket.isConnected()) {
-//				String text = stdIn.readLine();
-//				socOut.write(username + " : " + text);
-//				socOut.newLine();
-//				socOut.flush();
-//			}
-//		} catch (IOException e) {
-//			closeAll(clientSocket, socIn, socOut);
-//		}
-//	}
-
+	/**
+	 * Gets a <code>text</code> from the user interface that will be sent to the
+	 * other clients.
+	 * 
+	 * @see View.ChatRoomView
+	 * @param text
+	 */
 	public void sendMessage(String text) {
 		try {
 			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 			Date currentDate = new Date();
-			
+
 			socOut.write("(" + dateFormat.format(currentDate) + ") " + username + " : " + text);
 			socOut.newLine();
 			socOut.flush();
@@ -82,6 +79,11 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Creates a thread the read the incoming messages and displays them in the GUI.
+	 * 
+	 * @see View.ChatRoomView
+	 */
 	public void readMessages() {
 		new Thread(new Runnable() {
 			@Override
@@ -90,8 +92,8 @@ public class Client {
 				while (clientSocket.isConnected()) {
 					try {
 						textReceived = socIn.readLine();
-						clientView.dispalySentMessage(textReceived);
-						clientView.dispalySentMessage("\n");
+						clientView.dispalyMessage(textReceived);
+						clientView.dispalyMessage("\n");
 					} catch (IOException e) {
 						closeAll();
 					}
@@ -100,8 +102,11 @@ public class Client {
 		}).start();
 	}
 
+	/**
+	 * In case of an exception or when the client disconnects, loses the buffered
+	 * reader and writer and the socket of the client.
+	 */
 	public void closeAll() {
-
 		try {
 			if (socIn != null)
 				socIn.close();
@@ -114,6 +119,13 @@ public class Client {
 		}
 	}
 
+	/**
+	 * Main method. Creates a client with a username chosen by the user in an Option
+	 * pane, and starts reading the messages.
+	 * 
+	 * @see Client#readMessages()
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		if (args.length != 2) {
 			System.out.println("Usage: java EchoClient <EchoServer host> <EchoServer port>");
@@ -126,13 +138,12 @@ public class Client {
 				Socket echoSocket = new Socket(args[0], new Integer(args[1]).intValue());
 
 				Client client = new Client(echoSocket, username);
-				
-				client.readMessages();
-//			client.sendMessage();
+
 				client.getSocOut().write(username);
 				client.getSocOut().newLine();
 				client.getSocOut().flush();
-//				client.setId();
+
+				client.readMessages();
 			}
 
 		} catch (IOException e) {

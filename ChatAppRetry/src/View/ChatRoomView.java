@@ -19,7 +19,6 @@ public class ChatRoomView extends JFrame {
 	 * 
 	 */
 	private static final long serialVersionUID = 1L;
-//	private Client client;
 	private Client client;
 	private JTextArea messagesArea;
 	private String messageToSend;
@@ -28,6 +27,14 @@ public class ChatRoomView extends JFrame {
 		return this.client;
 	}
 
+	/**
+	 * Constructor of ChatRoomView Is a frame with a username and disconnect button
+	 * area, a message area for the history, sent and received messages and a
+	 * writing area with a send button for the client to write and send a new
+	 * message.
+	 * 
+	 * @param client
+	 */
 	public ChatRoomView(Client client) {
 		super("Chat room");
 
@@ -100,7 +107,7 @@ public class ChatRoomView extends JFrame {
 
 					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
 					Date currentDate = new Date();
-					dispalySentMessage("(" + dateFormat.format(currentDate) + ") " + messageToSend + "\n");
+					dispalyMessage("(" + dateFormat.format(currentDate) + ") " + messageToSend + "\n");
 					newMessageTextArea.setText("");
 				}
 
@@ -114,7 +121,12 @@ public class ChatRoomView extends JFrame {
 		setVisible(true);
 	}
 
-	public void dispalySentMessage(String message) {
+	/**
+	 * Adds a message in the message area.
+	 * 
+	 * @param message
+	 */
+	public void dispalyMessage(String message) {
 		this.messagesArea.append(message);
 	}
 

@@ -10,13 +10,21 @@ package stream;
 import java.io.*;
 import java.net.*;
 
+/**
+ * Server creates a server for the chat application.
+ * @author Nathalie Lebon et Yousra Jebbari
+ *
+ */
 public class Server {
 
 	
 	
 	
 	/**
-	 * main method
+	 * main method : creates a server and creates a clientManager for each client connected.
+	 * 
+	 * @see Client
+	 * @see ClientManager
 	 * 
 	 * @param EchoServer port
 	 * 
