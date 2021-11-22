@@ -2,6 +2,8 @@ package stream;
 
 import java.io.*;
 import java.net.*;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import javax.swing.JOptionPane;
 
@@ -12,7 +14,8 @@ public class Client {
 	private BufferedWriter socOut;
 	private BufferedReader socIn;
 	private String username;
-	ChatRoomView clientView;
+	private ChatRoomView clientView;
+	private long id;
 
 	public String getUsername() {
 		return username;
@@ -20,6 +23,17 @@ public class Client {
 
 	public BufferedWriter getSocOut() {
 		return socOut;
+	}
+	
+	public void setId() {
+		try {
+			this.id = Long.parseLong(socIn.readLine());
+			System.out.println(this.id);
+		} catch (NumberFormatException e) {
+			e.printStackTrace();
+		} catch (IOException e) {
+			closeAll();
+		}
 	}
 
 	public Client(Socket socket, String username) {
@@ -57,7 +71,10 @@ public class Client {
 
 	public void sendMessage(String text) {
 		try {
-			socOut.write(username + " : " + text);
+			SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
+			Date currentDate = new Date();
+			
+			socOut.write("(" + dateFormat.format(currentDate) + ") " + username + " : " + text);
 			socOut.newLine();
 			socOut.flush();
 		} catch (IOException e) {
@@ -73,8 +90,8 @@ public class Client {
 				while (clientSocket.isConnected()) {
 					try {
 						textReceived = socIn.readLine();
-						clientView.receiveMessage(textReceived);
-						clientView.receiveMessage("\n");
+						clientView.dispalySentMessage(textReceived);
+						clientView.dispalySentMessage("\n");
 					} catch (IOException e) {
 						closeAll();
 					}
@@ -109,11 +126,13 @@ public class Client {
 				Socket echoSocket = new Socket(args[0], new Integer(args[1]).intValue());
 
 				Client client = new Client(echoSocket, username);
+				
 				client.readMessages();
 //			client.sendMessage();
 				client.getSocOut().write(username);
 				client.getSocOut().newLine();
 				client.getSocOut().flush();
+//				client.setId();
 			}
 
 		} catch (IOException e) {

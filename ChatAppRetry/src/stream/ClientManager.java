@@ -29,8 +29,14 @@ public class ClientManager implements Runnable {
 			this.socIn = new BufferedReader(new InputStreamReader(clientSocket.getInputStream()));
 			this.socOut = new BufferedWriter(new OutputStreamWriter(clientSocket.getOutputStream()));
 			this.clientUsername = socIn.readLine();
+//			// send the id to the client
+//			System.out.println(clientManagers.size());
+//			socOut.write(clientManagers.size());
+//			socOut.newLine();
+//			socOut.flush();
+			
 			clientManagers.add(this);
-			messageHistory = Paths.get("").toAbsolutePath().getParent().toString(); //D:/documents/insa_lyon/4A/S1/Programmation_reseau/Chat/ChatAppRetry/history/messageHistory.txt";
+			messageHistory = Paths.get("").toAbsolutePath().getParent().toString(); 
 			messageHistory = messageHistory.replace(System.getProperty("file.separator"), "/");
 			
 			messageHistory += "/history/messageHistory.txt";
