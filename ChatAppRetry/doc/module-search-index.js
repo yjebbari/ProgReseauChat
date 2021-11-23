@@ -1,1 +1,1 @@
-moduleSearchIndex = [{"l":"chatRetry"}]
+moduleSearchIndex = [{"l":"chatApplication"}]

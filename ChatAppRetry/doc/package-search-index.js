@@ -1,1 +1,1 @@
-packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"m":"chatRetry","l":"stream"},{"m":"chatRetry","l":"UDP"},{"m":"chatRetry","l":"View"}]
+packageSearchIndex = [{"l":"All Packages","url":"allpackages-index.html"},{"m":"chatApplication","l":"stream"},{"m":"chatApplication","l":"UDP"},{"m":"chatApplication","l":"View"}]

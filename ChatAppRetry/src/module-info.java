@@ -1,4 +1,4 @@
-module chatRetry {
+module chatApplication {
 	requires java.desktop;
 	/*
 	 * The application has been developed using a tutorial from WittCode (youtube channel : https://www.youtube.com/channel/UCJnCCO9QVAP9saemgZ9tpoQ)
