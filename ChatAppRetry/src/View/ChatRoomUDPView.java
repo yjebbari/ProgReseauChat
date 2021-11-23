@@ -6,37 +6,34 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 
 import javax.swing.*;
 import javax.swing.border.LineBorder;
 
-import stream.Client;
+import UDP.ClientUDP;
 
 /**
- * Is the user interface allowing to send messages to the other connected
- * clients and reading the messages they sent.
+ * Is the user interface allowing to send messages to the other clients and
+ * reading the messages they sent.
  * 
- * @see stream.Client
- * @see stream.Server
+ * @see UDP.ClientUDP
  * 
  * @author Nathalie Lebon et Yousra Jebbari
  *
  */
-public class ChatRoomView extends JFrame {
+public class ChatRoomUDPView extends JFrame {
 
 	private static final long serialVersionUID = 1L;
-	private Client client;
+	private ClientUDP client;
 	private JTextArea messagesArea;
 	private String messageToSend;
 
-	public Client getClient() {
+	public ClientUDP getClient() {
 		return this.client;
 	}
 
 	/**
-	 * Constructor of ChatRoomView Is a frame with a username and disconnect button
+	 * Constructor of ChatRoomUDPView is a frame with a username and disconnect button
 	 * area, a message area for the history, sent and received messages and a
 	 * writing area with a send button for the client to write and send a new
 	 * message.
@@ -44,7 +41,7 @@ public class ChatRoomView extends JFrame {
 	 * @param client is the client to which the interface corresponds to; the window
 	 *               is linked to the client.
 	 */
-	public ChatRoomView(Client client) {
+	public ChatRoomUDPView(ClientUDP client) {
 		super("Chat room");
 
 		this.client = client;
@@ -113,10 +110,6 @@ public class ChatRoomView extends JFrame {
 				if (!newMessageTextArea.getText().isEmpty()) {
 					messageToSend = newMessageTextArea.getText();
 					client.sendMessage(messageToSend);
-
-					SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm");
-					Date currentDate = new Date();
-					dispalyMessage("(" + dateFormat.format(currentDate) + ") " + messageToSend + "\n");
 					newMessageTextArea.setText("");
 				}
 
@@ -136,7 +129,7 @@ public class ChatRoomView extends JFrame {
 	 * @param message is the String that will be displayed in the message area.
 	 */
 	public void dispalyMessage(String message) {
-		this.messagesArea.append(message);
+		this.messagesArea.append(message + "\n");
 	}
 
 }

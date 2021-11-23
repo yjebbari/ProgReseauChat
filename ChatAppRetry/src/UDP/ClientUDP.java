@@ -1,8 +1,6 @@
 package UDP;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
@@ -10,9 +8,14 @@ import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+import javax.swing.JOptionPane;
+
+import View.ChatRoomUDPView;
+
 /**
  * This class creates a UDP client.
  * 
+ * @see View.ChatRoomUDPView
  * @author Nathalie Lebon et Yousra Jebbari
  *
  */
@@ -21,22 +24,28 @@ public class ClientUDP extends DatagramSocket {
 	private MulticastSocket socket;
 	private InetAddress group;
 	private String username;
+	private ChatRoomUDPView chatRoomView;
+
+	public String getUsername() {
+		return username;
+	}
 
 	/**
 	 * Constructor of ClientUDP : initializes the usrename that is typed in by the
-	 * user, the group and the socket of the client.
+	 * user, the group and the socket of the client. Create a new instance
+	 * ChatRoomUDPView.
 	 * 
+	 * @see View.ChatRoomUDPView
 	 * @throws SocketException
 	 */
 	public ClientUDP() throws SocketException {
 		super();
 		try {
-			System.out.println("Enter your username.");
-			BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-			username = stdIn.readLine();
+			this.username = JOptionPane.showInputDialog("Enter your username");
 			this.group = InetAddress.getByName("228.5.6.7");
 			this.socket = new MulticastSocket(1234);
 			this.socket.joinGroup(group);
+			chatRoomView = new ChatRoomUDPView(this);
 		} catch (UnknownHostException e) {
 			closeAll();
 		} catch (IOException e) {
@@ -46,24 +55,19 @@ public class ClientUDP extends DatagramSocket {
 	}
 
 	/**
-	 * Takes the input of the user (String) and sends it to the other clients of the
-	 * multicast socket.
+	 * Takes the input of the user (String) from the GUI and sends it to the other
+	 * clients of the multicast socket.
+	 * @param text is the text to be sent to the other clients.
 	 */
-	public void sendText() {
-		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
-		String text;
+	public void sendMessage(String text) {
 		String textToSend;
 		try {
-			while (true) {
-				text = stdIn.readLine();
-				if (text.equals("bye"))
-					closeAll();
-				else {
-					textToSend = username + " : " + text;
-					DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group,
-							1234);
-					socket.send(message);
-				}
+			if (text.equals("bye"))
+				closeAll();
+			else {
+				textToSend = username + " : " + text;
+				DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
+				socket.send(message);
 			}
 		} catch (IOException e) {
 			closeAll();
@@ -71,7 +75,8 @@ public class ClientUDP extends DatagramSocket {
 	}
 
 	/**
-	 * Creates a new thread to receive messages and print them to the user.
+	 * Creates a new thread to receive messages and print them to the user in the
+	 * ChatRoomUDPView window.
 	 */
 	public void receiveMessage() {
 		new Thread(new Runnable() {
@@ -84,7 +89,7 @@ public class ClientUDP extends DatagramSocket {
 						socket.receive(recv);
 
 						String text = new String(recv.getData(), 0, recv.getLength());
-						System.out.println(text);
+						chatRoomView.dispalyMessage(text);
 					}
 				} catch (IOException e) {
 					closeAll();
@@ -124,7 +129,6 @@ public class ClientUDP extends DatagramSocket {
 		try {
 			ClientUDP client = new ClientUDP();
 			client.receiveMessage();
-			client.sendText();
 		} catch (SocketException e) {
 			e.printStackTrace();
 		}
