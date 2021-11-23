@@ -15,7 +15,7 @@ import View.ChatRoomView;
  * 
  * @see Server
  * @see ClientManager
- * @see ChatRoom
+ * @see View.ChatRoomView
  * @author Nathalie Lebon et Yousra Jebbari
  *
  */
@@ -41,8 +41,8 @@ public class Client {
 	 * see and send messages.
 	 * 
 	 * @see View.ChatRoomView
-	 * @param socket
-	 * @param username
+	 * @param socket   is the client socket connects to the server.
+	 * @param username is the username of the client.
 	 */
 	public Client(Socket socket, String username) {
 		super();
@@ -64,7 +64,7 @@ public class Client {
 	 * other clients.
 	 * 
 	 * @see View.ChatRoomView
-	 * @param text
+	 * @param text is the String that will be sent to the other connected clients.
 	 */
 	public void sendMessage(String text) {
 		try {
@@ -124,7 +124,8 @@ public class Client {
 	 * pane, and starts reading the messages.
 	 * 
 	 * @see Client#readMessages()
-	 * @param args
+	 * @param args are the execution parameters : the IP address of the server and
+	 *             the port to connect the client.
 	 */
 	public static void main(String[] args) {
 		if (args.length != 2) {

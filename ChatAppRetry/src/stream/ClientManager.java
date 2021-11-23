@@ -9,9 +9,8 @@ import java.util.ArrayList;
  * ClientManager handles a client and sends its messages to all other connected
  * clients Implements runnable to be executed in a thread.
  * 
- * @see Runnable
  * @see Client
- * @See Server
+ * @see Server
  * @author Nathalie Lebon et Yousra Jebbari
  *
  */
@@ -43,7 +42,7 @@ public class ClientManager implements Runnable {
 	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
 	 * @see Client
 	 * 
-	 * @param clientSocket
+	 * @param clientSocket is the client socket that connects the client.
 	 */
 	public ClientManager(Socket clientSocket) {
 		super();
@@ -95,7 +94,8 @@ public class ClientManager implements Runnable {
 	 * 
 	 * @see Client
 	 * @see ClientManager#closeAll(Socket, BufferedReader, BufferedWriter)
-	 * @param text
+	 * @param text is the String that will be sent to all clients except for the
+	 *             client that sent it.
 	 */
 	public void sendMessage(String text) {
 		try {
@@ -135,9 +135,9 @@ public class ClientManager implements Runnable {
 	 * manager, closes the buffered reader and writer and the socket of the client.
 	 * 
 	 * @see ClientManager#deleteClientManager()
-	 * @param socket
-	 * @param socIn
-	 * @param socOut
+	 * @param socket is the client socket to be closed.
+	 * @param socIn is the BufferedReader of the client to be closed.
+	 * @param socOut is the BufferedWriter of the client to be closed.
 	 */
 	public void closeAll(Socket socket, BufferedReader socIn, BufferedWriter socOut) {
 		deleteClientManager();

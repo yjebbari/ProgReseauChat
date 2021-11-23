@@ -14,10 +14,18 @@ import javax.swing.border.LineBorder;
 
 import stream.Client;
 
+/**
+ * Is the user interface permitting of to send messages to the other connected
+ * clients and reading the messages they sent.
+ * 
+ * @see stream.Client
+ * @see stream.Server
+ * 
+ * @author Nathalie Lebon et Yousra Jebbari
+ *
+ */
 public class ChatRoomView extends JFrame {
-	/**
-	 * 
-	 */
+
 	private static final long serialVersionUID = 1L;
 	private Client client;
 	private JTextArea messagesArea;
@@ -33,7 +41,8 @@ public class ChatRoomView extends JFrame {
 	 * writing area with a send button for the client to write and send a new
 	 * message.
 	 * 
-	 * @param client
+	 * @param client is the client to which the interface corresponds to; the window
+	 *               is linked to the client.
 	 */
 	public ChatRoomView(Client client) {
 		super("Chat room");
@@ -122,9 +131,9 @@ public class ChatRoomView extends JFrame {
 	}
 
 	/**
-	 * Adds a message in the message area.
+	 * Adds a text message in the message area.
 	 * 
-	 * @param message
+	 * @param message is the String that will be displayed in the message area.
 	 */
 	public void dispalyMessage(String message) {
 		this.messagesArea.append(message);

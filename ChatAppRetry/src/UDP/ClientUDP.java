@@ -10,12 +10,24 @@ import java.net.MulticastSocket;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
+/**
+ * This class creates a UDP client.
+ * 
+ * @author Nathalie Lebon et Yousra Jebbari
+ *
+ */
 public class ClientUDP extends DatagramSocket {
 
 	private MulticastSocket socket;
 	private InetAddress group;
 	private String username;
 
+	/**
+	 * Constructor of ClientUDP : initializes the usrename that is typed in by the
+	 * user, the group and the socket of the client.
+	 * 
+	 * @throws SocketException
+	 */
 	public ClientUDP() throws SocketException {
 		super();
 		try {
@@ -33,6 +45,10 @@ public class ClientUDP extends DatagramSocket {
 
 	}
 
+	/**
+	 * Takes the input of the user (String) and sends it to the other clients of the
+	 * multicast socket.
+	 */
 	public void sendText() {
 		BufferedReader stdIn = new BufferedReader(new InputStreamReader(System.in));
 		String text;
@@ -40,11 +56,13 @@ public class ClientUDP extends DatagramSocket {
 		try {
 			while (true) {
 				text = stdIn.readLine();
-				if(text.equals("bye")) closeAll();
+				if (text.equals("bye"))
+					closeAll();
 				else {
-				textToSend = username + " : " + text;
-				DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
-				socket.send(message);
+					textToSend = username + " : " + text;
+					DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group,
+							1234);
+					socket.send(message);
 				}
 			}
 		} catch (IOException e) {
@@ -52,6 +70,9 @@ public class ClientUDP extends DatagramSocket {
 		}
 	}
 
+	/**
+	 * Creates a new thread to receive messages and print them to the user.
+	 */
 	public void receiveMessage() {
 		new Thread(new Runnable() {
 			@Override
@@ -73,6 +94,9 @@ public class ClientUDP extends DatagramSocket {
 		}).start();
 	}
 
+	/**
+	 * The socket leaves the group.
+	 */
 	public void leaveGroup() {
 		try {
 			socket.leaveGroup(group);
@@ -81,6 +105,9 @@ public class ClientUDP extends DatagramSocket {
 		}
 	}
 
+	/**
+	 * Closes the multicast socket of the client after leaving the group.
+	 */
 	public void closeAll() {
 		leaveGroup();
 		if (socket != null)
@@ -88,6 +115,11 @@ public class ClientUDP extends DatagramSocket {
 		System.exit(1);
 	}
 
+	/**
+	 * Main method. Creates a ClientUDP and starts receiving and sending messages.
+	 * 
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		try {
 			ClientUDP client = new ClientUDP();
