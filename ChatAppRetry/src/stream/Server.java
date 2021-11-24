@@ -15,7 +15,7 @@ import java.net.*;
  * 
  * @see ClientManager
  * @see Client 
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class Server {

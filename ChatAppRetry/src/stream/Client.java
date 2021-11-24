@@ -16,7 +16,7 @@ import View.ChatRoomView;
  * @see Server
  * @see ClientManager
  * @see View.ChatRoomView
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class Client {

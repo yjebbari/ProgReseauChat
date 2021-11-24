@@ -11,7 +11,7 @@ import java.util.ArrayList;
  * 
  * @see Client
  * @see Server
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class ClientManager implements Runnable {

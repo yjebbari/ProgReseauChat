@@ -18,7 +18,7 @@ import UDP.ClientUDP;
  * 
  * @see UDP.ClientUDP
  * 
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class ChatRoomUDPView extends JFrame {

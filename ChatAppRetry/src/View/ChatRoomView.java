@@ -21,7 +21,7 @@ import stream.Client;
  * @see stream.Client
  * @see stream.Server
  * 
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class ChatRoomView extends JFrame {

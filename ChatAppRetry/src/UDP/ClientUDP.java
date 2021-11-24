@@ -16,7 +16,7 @@ import View.ChatRoomUDPView;
  * This class creates a UDP client.
  * 
  * @see View.ChatRoomUDPView
- * @author Nathalie Lebon et Yousra Jebbari
+ * @author Nathalie Lebon and Yousra Jebbari
  *
  */
 public class ClientUDP extends DatagramSocket {
