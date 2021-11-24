@@ -31,7 +31,7 @@ public class ClientUDP extends DatagramSocket {
 	}
 
 	/**
-	 * Constructor of ClientUDP : initializes the usrename that is typed in by the
+	 * Constructor of ClientUDP : initializes the username that is typed in by the
 	 * user, the group and the socket of the client. Create a new instance
 	 * ChatRoomUDPView.
 	 * 
@@ -42,10 +42,14 @@ public class ClientUDP extends DatagramSocket {
 		super();
 		try {
 			this.username = JOptionPane.showInputDialog("Enter your username");
-			this.group = InetAddress.getByName("228.5.6.7");
-			this.socket = new MulticastSocket(1234);
-			this.socket.joinGroup(group);
-			chatRoomView = new ChatRoomUDPView(this);
+			if(this.username != null) {
+				this.chatRoomView = new ChatRoomUDPView(this);
+				this.group = InetAddress.getByName("228.5.6.7");
+				this.socket = new MulticastSocket(1234);
+				this.socket.joinGroup(group);
+			} else
+				System.exit(1);
+			
 		} catch (UnknownHostException e) {
 			closeAll();
 		} catch (IOException e) {
@@ -57,18 +61,17 @@ public class ClientUDP extends DatagramSocket {
 	/**
 	 * Takes the input of the user (String) from the GUI and sends it to the other
 	 * clients of the multicast socket.
+	 * 
 	 * @param text is the text to be sent to the other clients.
 	 */
 	public void sendMessage(String text) {
 		String textToSend;
 		try {
-			if (text.equals("bye"))
-				closeAll();
-			else {
-				textToSend = username + " : " + text;
-				DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
-				socket.send(message);
-			}
+
+			textToSend = username + " : " + text;
+			DatagramPacket message = new DatagramPacket(textToSend.getBytes(), textToSend.length(), group, 1234);
+			socket.send(message);
+
 		} catch (IOException e) {
 			closeAll();
 		}

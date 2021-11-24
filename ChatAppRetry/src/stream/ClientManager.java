@@ -136,7 +136,7 @@ public class ClientManager implements Runnable {
 	 * 
 	 * @see ClientManager#deleteClientManager()
 	 * @param socket is the client socket to be closed.
-	 * @param socIn is the BufferedReader of the client to be closed.
+	 * @param socIn  is the BufferedReader of the client to be closed.
 	 * @param socOut is the BufferedWriter of the client to be closed.
 	 */
 	public void closeAll(Socket socket, BufferedReader socIn, BufferedWriter socOut) {
@@ -185,10 +185,9 @@ public class ClientManager implements Runnable {
 			fileReader.close();
 		} catch (IOException e) {
 			try {
-				socOut.write("Error in loading previous messages.");
+				socOut.write("Error in loading previous messages.\n-----------------------------");
 				socOut.newLine();
 				socOut.flush();
-				closeAll(clientSocket, socIn, socOut);
 			} catch (Exception exc) {
 				closeAll(clientSocket, socIn, socOut);
 			}
